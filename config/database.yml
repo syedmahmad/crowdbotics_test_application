@@ -1,0 +1,11 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+
+development:
+  <<: *default
+  username: postgres
+  password: postgres
+  host: localhost
+  database: zenith_cv_dev

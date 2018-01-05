@@ -1,0 +1,41 @@
+<button class="btn btn-success" id="fetch_phrases"> fetch phrase</button>
+<button id="clear_phrases"> clear phrase</button>
+
+<div>
+  <h2>There are <span id="phrase-count"></span> phrases left in the database</h2>
+  <ul id="phrases-section"></ul>
+</div>
+<script>
+$(document).ready(function(){
+   $.post( "/fetch_all_phrases", function( data ) {
+      $.each(data.phrases, function( index, phrase ) {
+        $("#phrases-section").append("<li>"+phrase+"</li>")
+      });
+      phrasesLeft = 10;
+      if(data.phrases.length > 0){
+        phrasesLeft = data.phrases.lenght - 9;
+      }
+      $("#phrase-count").html(phrasesLeft);
+    });
+
+
+  $("#fetch_phrases").on('click', function(){
+    $.post( "/fetch_phrases", function( data ) {
+      if(data.hasPhrase){
+        $("#phrases-section").prepend("<li>"+data.phrase+"</li>")
+        $("#phrase-count").html(parseInt($("#phrase-count").text() - 1))
+      }else{
+        alert("no more phrases in db.");
+      }
+    });
+  });
+
+  $("#clear_phrases").on('click', function(){
+    $.post( "/clear_phrases", function( data ) {
+      $("#phrases-section").html("")
+       $("#phrase-count").html(10)
+    });
+  });
+})
+
+</script>
